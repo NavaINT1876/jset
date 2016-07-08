@@ -1,0 +1,132 @@
+.single-view-text
+  border-bottom: 3px dotted #4c61a1
+  padding-bottom: 1.4em
+
+.single-view-text p
+  text-indent: 5%
+  text-align: justify
+  margin: .3em 0
+
+.single-view-title
+  text-indent: 5%
+
+
+.form-item
+  margin: 0 0 20px 0
+
+.form-name
+  margin-right: 2em
+
+.form-name, .form-email
+  width: 15em
+  float: left
+
+.form-name label, .form-email label
+  margin-right: 5px
+
+@media all and (min-width: 800px)
+  .form-comment
+    margin-top: 86px
+
+@media all and (min-width: 600px)
+  .form-comment textarea
+    width: 36em
+
+@media all and (max-width: 599px)
+  .form-comment textarea
+    width: 90%
+
+  .form-name label, .form-email label
+    display: block
+    margin-bottom: 3px
+
+@media all and (max-width: 850px)
+  .form-comment
+    clear: both
+
+.form-comment textarea
+  height: 8em
+
+label[for=comment]
+  display: block
+  margin-bottom: 5px
+
+.form-item input, #comment, #new-item-form .form-item textarea
+  padding: 6px 10px
+  border: 1px solid #6d6d6d
+  box-shadow: 0 0 2px 1px #6d6d6d
+  -webkit-box-shadow: 0 0 2px 1px #6d6d6d
+  -moz-box-shadow: 0 0 2px 1px #6d6d6d
+  -webkit-border-radius: 6px
+  -moz-border-radius: 6px
+  border-radius: 6px
+
+.submit-form
+  text-align: left
+
+#comment-form
+  padding-bottom: 15px
+  border-bottom: 3px dashed #4c61a1
+
+
+#comment-form .submit-form input[type=submit],
+#new-item-form .submit-form input[type=submit],button,.button
+  padding: 7px 15px
+  background: #2F5794
+  color: #fff
+  font-weight: bold
+  border-radius: 7px
+  cursor: pointer
+  &:hover
+    background: #25488a
+    box-shadow: 0 0 2px 1px #6d6d6d
+    -webkit-box-shadow: 0 0 2px 1px #6d6d6d
+    -moz-box-shadow: 0 0 2px 1px #6d6d6d
+  &:active
+    background: #1e366e
+
+.comments-list section
+  position: relative
+  height: auto
+  padding: 6px 15px
+  border: 1px solid #6d6d6d
+  box-shadow: 0 0 2px 1px #6d6d6d
+  -webkit-box-shadow: 0 0 2px 1px #6d6d6d
+  -moz-box-shadow: 0 0 2px 1px #6d6d6d
+  -webkit-border-radius: 6px
+  -moz-border-radius: 6px
+  border-radius: 6px
+  font-size: .8em
+  margin-bottom: 12px
+  background-color: #edf1f9
+
+.comment-date
+  position: absolute
+  top: 0
+  right: 0
+  width: 80px
+  height: 20px
+  border-bottom: 1px solid #696969
+  border-left: 1px solid #696969
+  border-radius: 0 6px 0 0
+  padding: 6px 0 0 12px
+
+@media all and (max-width: 450px)
+  .comments-list section h5
+    margin: 24px 0 0 0 !important
+
+@media all and (min-width: 451px)
+  .comments-list section h5
+    margin: 5px 0
+
+.comments-list section h5
+  font-size: 1.2em
+  font-family: sans-serif
+
+.comments-list section h5 span
+  font-weight: normal
+
+.submit-form a
+  text-decoration: none
+  width: 8em
+  display: block
