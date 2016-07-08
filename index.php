@@ -1,6 +1,4 @@
 <?php
-die('TEST WAS FINISHED');
-
 //Configuration file is included at first.
 include_once('conf.php');
 
