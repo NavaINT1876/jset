@@ -26,6 +26,7 @@
                         Sort comments by:
                         <span class="caret"></span>
                     </button>
+                    <br><br>
                     <ul class="dropdown-menu">
                         <li <?php echo ($sortValue == 'name' && $sortOrder == 'asc') ? 'class="active"' : '' ?>>
                             <a href="/?sortVal=name&sortOrder=asc">Author A -> Z</a>
@@ -53,11 +54,26 @@
                     <div class="panel-heading">
                         <span class="author">
                             <strong><?= $comment['name'] ?></strong>
+                            <?php if($comment['changed_by_admin'] == 1){ ?>
+                                <span>(Chanded by admin)</span>
+                            <?php } ?>
                             <?php if(isset($_SESSION['admin'])){ ?>
-                                <a href="/?r=edit&id=<?= $comment['id'] ?>" class="btn btn-primary btn-xs">
+                                <a href="/?r=edit&id=<?= $comment['id'] ?>"
+                                   class="btn btn-primary btn-xs pull-right edit-comment-btn">
                                     <span>Edit</span>
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </a>
+                                <?php if($comment['is_approved'] == 0) { ?>
+                                    <a href="/?r=approve&id=<?= $comment['id'] ?>"
+                                       class="btn btn-success btn-xs pull-right edit-comment-btn">
+                                        <span>Approve</span>
+                                    </a>
+                                <?php }else{ ?>
+                                    <a href="/?r=disapprove&id=<?= $comment['id'] ?>"
+                                       class="btn btn-danger btn-xs pull-right edit-comment-btn">
+                                        <span>Disapprove</span>
+                                    </a>
+                                <?php } ?>
                             <?php } ?>
                         </span>
                         <span class="pull-right">Date: <?= date('d.M.Y H:i', $comment['created_at']) ?></span>

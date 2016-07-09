@@ -42,6 +42,12 @@ class Controller
                 $this->editAction();
                 $this->getBottom();
                 break;
+            case 'approve':
+                $this->approveAction();
+                break;
+            case 'disapprove':
+                $this->disapproveAction();
+                break;
             default:
                 include_once('404.php');
         }
@@ -99,9 +105,9 @@ class Controller
     {
         $model = new Model();
         session_start();
-        if(isset($_SESSION['admin'])){
+        if (isset($_SESSION['admin'])) {
             $comments = $model->getAdminComments($sortValue, $sortOrder);
-        }else{
+        } else {
             $comments = $model->getComments($sortValue, $sortOrder);
         }
 
@@ -110,6 +116,7 @@ class Controller
         }
         include_once('view-main.php');
     }
+
     public function editAction()
     {
         $model = new Model();
@@ -118,75 +125,28 @@ class Controller
         $comment = $model->getComment($id);
 
         if (isset($_POST['submit'])) {
-            $model->saveNewComment();
+            $model->updateComment($id);
+            header("Location: /?r=edit&id=" . $id);
+            die;
         }
         include_once('view-edit.php');
     }
 
-//    /**
-//     * Action shows page of creating new news item.
-//     */
-//    public function create(){
-//        include_once('add-edit.php');
-//    }
-//
-//    /**
-//     * Action handles XMLHttpResuqst to create new news item.
-//     */
-//    public function createAJAX(){
-//        $model = new Model();
-//        if($model->validateItemFields()){
-//            $model->saveNewItem();
-//            echo 'Item was created!';
-//        }else{
-//            echo 'Fields missing!';
-//        }
-//    }
-//
-//    /**
-//     * Action shows page of editing new news item.
-//     */
-//    public function edit(){
-//        $model = new Model();
-//        $id = $model->getIntPurify($_GET['id']);
-//        $row = $model->getItem($id);
-//        include_once('add-edit.php');
-//    }
-//
-//    /**
-//     * Action handles XMLHttpResuqst to edit news item.
-//     */
-//    public function editAJAX(){
-//        $model = new Model();
-//        if($model->validateItemFields()){
-//            $model->updateItem($model->purifyVal($_POST['id']));
-//            echo 'Changes saved!';
-//        }else{
-//            echo 'Fields missing!';
-//        }
-//    }
-//
-//    /**
-//     * Action handles XMLHttpResuqst to remove new news item.
-//     */
-//    public function deleteAJAX(){
-//        $model = new Model();
-//        $id = $model->getIntPurify($_GET['id']);
-//        $model->removeItem($id);
-//    }
-//
-//    /**
-//     * Action handles XMLHttpResuqst to create new comment.
-//     */
-//    public function createCommentAJAX(){
-//        $model = new Model();
-//        $id = $model->getIntPurify($_GET['id']);
-//        $row = $model->getItem($id);
-//        if($model->validateCommentFields()){
-//            $model->saveNewComment();
-//            echo 'Your comment was added!';
-//        }else{
-//            echo 'Fields missing!';
-//        }
-//    }
+    public function approveAction()
+    {
+        $model = new Model();
+        $id = (int)$model->purifyVal($_GET['id']);
+        $model->approveComment($id, 1);
+        header("Location: /");
+        die;
+    }
+
+    public function disapproveAction()
+    {
+        $model = new Model();
+        $id = (int)$model->purifyVal($_GET['id']);
+        $model->approveComment($id, 0);
+        header("Location: /");
+        die;
+    }
 }

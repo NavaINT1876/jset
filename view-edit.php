@@ -33,7 +33,6 @@
                             <p class="help-block">Allowed types: JPG, GIF, PNG. Maximum resolution: 320х240px</p>
                         </div>
                         <button type="submit" name="submit" class="btn btn-primary">Отправить</button>
-                        <a href="#" class="btn btn-default" id="comment-preview">Предварительный просмотр</a>
                     </form>
                 </div>
             </div>

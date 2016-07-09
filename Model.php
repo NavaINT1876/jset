@@ -23,11 +23,6 @@ class Model
     const ADMIN_PASSWORD_HASH = '$2y$10$rjlwRSdRUeZpJzCdtWCRweJLU1ySmghM3CQqpJP4fHmoSCn8kdE12';
 
     /**
-     * Amount of items(news) to show on one page.
-     */
-    const ITEMS_PER_PAGE = 5;
-
-    /**
      * Constructor used to set connection to the database `testtask`.
      * Executes (connection is set) when new instance of Model is created.
      */
@@ -47,7 +42,7 @@ class Model
     public function saveNewComment()
     {
         $uploadfile = null;
-        if(!empty($_FILES['logo']['name'])){
+        if (!empty($_FILES['logo']['name'])) {
             //Check mime type of the uploaded file
             $finfo = new finfo(FILEINFO_MIME_TYPE);
             if (false === $ext = array_search(
@@ -58,7 +53,8 @@ class Model
                         'gif' => 'image/gif',
                     ),
                     true
-                )) {
+                )
+            ) {
                 session_start();
                 $_SESSION['fileTypeError'] = 'Wrong file type was uploaded! Allowed types: JPG, GIF, PNG.';
                 header("Location: /");
@@ -66,7 +62,7 @@ class Model
             }
 
             $info = pathinfo($_FILES['logo']['name']);
-            $newName = md5($_POST['name'] . $_FILES['userFile']['tmp_name']). time() . "." . $info['extension'];
+            $newName = md5($_POST['name'] . $_FILES['userFile']['tmp_name']) . time() . "." . $info['extension'];
             $uploadfile = self::FILE_UPLOAD_DIR . $newName;
 
             move_uploaded_file($_FILES['logo']['tmp_name'], $uploadfile);
@@ -76,7 +72,7 @@ class Model
         $email = $this->purifyVal($_POST['email']);
         $message = $this->purifyVal($_POST['message']);
 
-        if(empty($name) || empty($email) || empty($message)){
+        if (empty($name) || empty($email) || empty($message)) {
             session_start();
             $_SESSION['error'] = 'Some fields missing. Check all fields.';
             header("Location: /");
@@ -102,8 +98,49 @@ class Model
         $query->execute();
     }
 
-    public function getComments($sortValue, $sortOrder){
-        $preparedQuery = "SELECT  `name`, `email`, `message`, `is_approved`, `created_at`, `logo`
+    /**
+     * Inserts comment into database `testtask` into table `comments`
+     * @param $id
+     */
+    public function updateComment($id)
+    {
+        $name = $this->purifyVal($_POST['name']);
+        $email = $this->purifyVal($_POST['email']);
+        $message = $this->purifyVal($_POST['message']);
+
+        if (empty($name) || empty($email) || empty($message)) {
+            session_start();
+            $_SESSION['error'] = 'Some fields missing. Check all fields.';
+            header("Location: /?r=edit&id=" . $id);
+            die;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            session_start();
+            $_SESSION['error'] = 'Wrong email.';
+            header("Location: /");
+            die;
+        }
+
+        $preparedQuery = "UPDATE `" . DB_NAME . "`.`" . self::COMMENTS .
+            "` SET name=:thename,
+                    email=:email,
+                    message=:message,
+                    changed_by_admin=:changed_by_admin
+                    WHERE id=:id";
+        $changedByAdmin = 1;
+        $query = $this->db->prepare($preparedQuery);
+        $query->bindParam(':thename', $name);
+        $query->bindParam(':email', $email);
+        $query->bindParam(':message', $message);
+        $query->bindParam(':changed_by_admin', $changedByAdmin);
+        $query->bindParam(':id', $id);
+        $query->execute();
+    }
+
+    public function getComments($sortValue, $sortOrder)
+    {
+        $preparedQuery = "SELECT  `name`, `email`, `message`, `is_approved`, `created_at`, `logo`, `changed_by_admin`
          FROM `" . DB_NAME . "`.`" . self::COMMENTS .
             "` WHERE is_approved=:is_approved ORDER BY `" . $sortValue . "` " . strtoupper($sortOrder);
         $query = $this->db->prepare($preparedQuery);
@@ -111,8 +148,9 @@ class Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getAdminComments($sortValue, $sortOrder){
-        $preparedQuery = "SELECT  `id`, `name`, `email`, `message`, `is_approved`, `created_at`, `logo`
+    public function getAdminComments($sortValue, $sortOrder)
+    {
+        $preparedQuery = "SELECT  `id`, `name`, `email`, `message`, `is_approved`, `created_at`, `logo`, `changed_by_admin`
          FROM `" . DB_NAME . "`.`" . self::COMMENTS .
             "` WHERE is_approved IN (:is_approved, 0) ORDER BY `" . $sortValue . "` " . strtoupper($sortOrder);
         $query = $this->db->prepare($preparedQuery);
@@ -120,7 +158,8 @@ class Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getComment($id){
+    public function getComment($id)
+    {
         $preparedQuery = "SELECT  `id`, `name`, `email`, `message`, `is_approved`, `created_at`, `logo`
          FROM `" . DB_NAME . "`.`" . self::COMMENTS .
             "` WHERE id=:id";
@@ -129,8 +168,19 @@ class Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function checkCredentials($login, $password){
-        if($login === self::ADMIN_LOGIN && password_verify($password, self::ADMIN_PASSWORD_HASH)){
+    public function approveComment($id, $isApproved)
+    {
+        $preparedQuery = "UPDATE `" . DB_NAME . "`.`" . self::COMMENTS .
+            "` SET is_approved=:is_approved WHERE id=:id";
+        $query = $this->db->prepare($preparedQuery);
+        $query->bindParam(':is_approved', $isApproved);
+        $query->bindParam(':id', $id);
+        $query->execute();
+    }
+
+    public static function checkCredentials($login, $password)
+    {
+        if ($login === self::ADMIN_LOGIN && password_verify($password, self::ADMIN_PASSWORD_HASH)) {
             return true;
         }
         return false;
