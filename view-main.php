@@ -1,7 +1,18 @@
 <div class="container">
-    <div class="row">
+    <div class="row" id="comments-wrapper" data-prototype="
+                                            <div class='panel panel-success'>
+                                                <div class='panel-heading'>
+                                                    <span class='author'>
+                                                        <strong>__AUTHOR__ (It's you)</strong>
+                                                    </span>
+                                                    <span class='pull-right'>Date: moment ago</span>
+                                                </div>
+                                                <div class='panel-body'>
+                                                    <p>__COMMENT_TEXT__</p>
+                                                </div>
+                                            </div>">
         <div class="col-md-2 col-lg-3"></div>
-        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6" id="comments-container">
             <div class="btn-group" role="group">
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -30,7 +41,6 @@
                     </ul>
                 </div>
             </div>
-            <br><br>
             <?php foreach ($comments as $comment) { ?>
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -47,7 +57,7 @@
         </div>
         <div class="col-md-2 col-lg-3"></div>
     </div>
-    <div class="row">
+    <div class="row" id="form-container">
         <div class="col-md-2 col-lg-3"></div>
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
             <div class="panel panel-primary">
@@ -81,7 +91,7 @@
                             <p class="help-block">Allowed types: JPG, GIF, PNG. Maximum resolution: 320х240px</p>
                         </div>
                         <button type="submit" name="submit" class="btn btn-primary">Отправить</button>
-                        <a href="#" class="btn btn-default" id="preview">Предварительный просмотр</a>
+                        <a href="#" class="btn btn-default" id="comment-preview">Предварительный просмотр</a>
                     </form>
                 </div>
             </div>
