@@ -6,19 +6,29 @@
  * Main class which contains all actions.
  * Works with Model and view templates.
  */
-class Controller {
+class Controller
+{
     /**
      * Method to get route and page.
      * @return mixed
      */
-    public function getRoute(){
+    public function getRoute()
+    {
         $model = new Model();
         $route = $model->purifyVal($_GET['r']);
-        switch ($route){
+
+        $sortValue = $model->purifyVal($_GET['sortVal']);
+        $sortOrder = $model->purifyVal($_GET['sortOrder']);
+        if(empty($sortValue) || empty($sortOrder)){
+            $sortValue = 'created_at';
+            $sortOrder = 'desc';
+        }
+        switch ($route) {
             case '':
                 $this->getTop();
-                $this->mainAction();
-                $this->getBottom(); break;
+                $this->mainAction($sortValue, $sortOrder);
+                $this->getBottom();
+                break;
 //            case 'edit-news-ajax':
 //                $this->editAJAX(); break;
 //            case 'create-news-ajax':
@@ -36,14 +46,16 @@ class Controller {
     /**
      * Method includes header into the document.
      */
-    public function getTop(){
+    public function getTop()
+    {
         include_once('header.php');
     }
 
     /**
      * Method includes footer into the document.
      */
-    public function getBottom(){
+    public function getBottom()
+    {
         include_once('footer.php');
     }
 
@@ -60,12 +72,15 @@ class Controller {
 
     /**
      * Action shows news list.
+     * @param null $sortValue
+     * @param null $sortOrder
      */
-    public function mainAction(){
+    public function mainAction($sortValue, $sortOrder)
+    {
         $model = new Model();
-        $comments = $model->getComments();
+        $comments = $model->getComments($sortValue, $sortOrder);
 
-        if(isset($_POST['submit'])){
+        if (isset($_POST['submit'])) {
             $model->saveNewComment();
         }
         include_once('view-main.php');

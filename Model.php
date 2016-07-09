@@ -150,11 +150,15 @@ class Model
         $query->execute();
     }
 
-    public function getComments(){
+    public function getComments($sortValue, $sortOrder){
+//        var_dump($sortValue);
+//        var_dump($sortOrder);
         $preparedQuery = "SELECT  `name`, `email`, `message`, `is_approved`, `created_at`, `logo`
-         FROM `" . DB_NAME . "`.`" . self::COMMENTS . "` WHERE is_approved=:is_approved";
+         FROM `" . DB_NAME . "`.`" . self::COMMENTS .
+            "` WHERE is_approved=:is_approved ORDER BY `" . $sortValue . "` " . strtoupper($sortOrder);
+//        var_dump($preparedQuery);die;
         $query = $this->db->prepare($preparedQuery);
-        $query->execute([':is_approved' => 0]);
+        $query->execute([':is_approved' => 1]);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
