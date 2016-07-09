@@ -17,6 +17,8 @@ class Model
      */
     const COMMENTS = 'comments';
 
+    const FILE_UPLOAD_DIR = 'uploads/';
+
     /**
      * Amount of items(news) to show on one page.
      */
@@ -138,6 +140,12 @@ class Model
      */
     public function saveNewComment()
     {
+        $info = pathinfo($_FILES['logo']['name']);
+        $newName = md5($_POST['name'] . $_FILES['userFile']['tmp_name']). time() . "." . $info['extension'];
+        $uploadfile = self::FILE_UPLOAD_DIR . $newName;
+
+        move_uploaded_file($_FILES['logo']['tmp_name'], $uploadfile);
+
         $preparedQuery = "INSERT INTO `" . DB_NAME . "`.`" . self::COMMENTS
             . "` (`name` , `email` , `message` , `created_at` , `logo`)
             VALUES (:thename , :email, :message, :created_at, :logo)";
@@ -146,7 +154,7 @@ class Model
         $query->bindParam(':email', $this->purifyVal($_POST['email']));
         $query->bindParam(':message', $this->purifyVal($_POST['message']));
         $query->bindParam(':created_at', time());
-        $query->bindParam(':logo', $this->purifyVal($_POST['name']));
+        $query->bindParam(':logo', $uploadfile);
         $query->execute();
     }
 

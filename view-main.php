@@ -50,6 +50,7 @@
                         <span class="pull-right">Date: <?= date('d.M.Y H:i', $comment['created_at']) ?></span>
                     </div>
                     <div class="panel-body">
+                        <img src="<?= $comment['logo'] ?>" width="80" alt="Logo" class="user-logo">
                         <p><?= $comment['message'] ?></p>
                     </div>
                 </div>
@@ -63,7 +64,7 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">Leave your comment</div>
                 <div class="panel-body">
-                    <form action="" method="post">
+                    <form enctype="multipart/form-data" action="" method="post">
                         <div class="row">
                             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
@@ -87,7 +88,7 @@
                         </div>
                         <div class="form-group">
                             <label for="logo">Logo image</label>
-                            <input type="file" id="logo">
+                            <input name="logo" type="file" id="logo">
                             <p class="help-block">Allowed types: JPG, GIF, PNG. Maximum resolution: 320х240px</p>
                         </div>
                         <button type="submit" name="submit" class="btn btn-primary">Отправить</button>
