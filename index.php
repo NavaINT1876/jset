@@ -1,7 +1,9 @@
 <?php
 //Configuration file is included at first.
-include_once('conf.php');
-
+include_once('db_conf.php');
+function __autoload($class_name) {
+    include $class_name . '.php';
+}
 //New instance of Controller
 $controller = new Controller();
 
