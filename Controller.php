@@ -2,15 +2,16 @@
 
 /**
  * Class Controller
+ *
  * Main class which contains all actions.
  * Works with Model and view templates.
  */
-class Controller{
+class Controller {
     /**
      * Method to get route and page.
      * @return mixed
      */
-    function getRoute(){
+    public function getRoute(){
         $model = new Model();
         $route = $model->purifyVal($_GET['r']);
         switch ($route){
@@ -45,24 +46,23 @@ class Controller{
     }
 
     /**
-     * Method includes header and sidebar into the document.
+     * Method includes header into the document.
      */
-    function getTop(){
+    public function getTop(){
         include_once('header.php');
-        include_once('sidebar.php');
     }
 
     /**
      * Method includes footer into the document.
      */
-    function getBottom(){
+    public function getBottom(){
         include_once('footer.php');
     }
 
     /**
      * Action shows single news item with title, text, comment form and comments list.
      */
-    function view(){
+    public function view(){
         $model = new Model();
         $id = $model->getIntPurify($_GET['id']);
         $row = $model->getItem($id);
@@ -73,26 +73,26 @@ class Controller{
     /**
      * Action shows news list.
      */
-    function newsList(){
-        $model = new Model();
-        $page = $_GET['page'] ? $model->getIntPurify($_GET['page']) : 1;
-        $model->countNewsRows();
-        $paginParams = $model->getPaginationParams($page);
-        $newsArr = $model->getNewsList($page);
-        include_once('list.php');
+    public function newsList(){
+//        $model = new Model();
+//        $page = $_GET['page'] ? $model->getIntPurify($_GET['page']) : 1;
+//        $model->countNewsRows();
+//        $paginParams = $model->getPaginationParams($page);
+//        $newsArr = $model->getNewsList($page);
+        include_once('view-main.php');
     }
 
     /**
      * Action shows page of creating new news item.
      */
-    function create(){
+    public function create(){
         include_once('add-edit.php');
     }
 
     /**
      * Action handles XMLHttpResuqst to create new news item.
      */
-    function createAJAX(){
+    public function createAJAX(){
         $model = new Model();
         if($model->validateItemFields()){
             $model->saveNewItem();
@@ -105,7 +105,7 @@ class Controller{
     /**
      * Action shows page of editing new news item.
      */
-    function edit(){
+    public function edit(){
         $model = new Model();
         $id = $model->getIntPurify($_GET['id']);
         $row = $model->getItem($id);
@@ -115,7 +115,7 @@ class Controller{
     /**
      * Action handles XMLHttpResuqst to edit news item.
      */
-    function editAJAX(){
+    public function editAJAX(){
         $model = new Model();
         if($model->validateItemFields()){
             $model->updateItem($model->purifyVal($_POST['id']));
@@ -128,7 +128,7 @@ class Controller{
     /**
      * Action handles XMLHttpResuqst to remove new news item.
      */
-    function deleteAJAX(){
+    public function deleteAJAX(){
         $model = new Model();
         $id = $model->getIntPurify($_GET['id']);
         $model->removeItem($id);
@@ -137,7 +137,7 @@ class Controller{
     /**
      * Action handles XMLHttpResuqst to create new comment.
      */
-    function createCommentAJAX(){
+    public function createCommentAJAX(){
         $model = new Model();
         $id = $model->getIntPurify($_GET['id']);
         $row = $model->getItem($id);
