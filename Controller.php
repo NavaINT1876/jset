@@ -34,12 +34,11 @@ class Controller
                 $this->loginAction();
                 $this->getBottom();
                 break;
-//            case 'create-news-ajax':
-//                $this->createAJAX(); break;
-//            case 'delete-news-ajax':
-//                $this->deleteAJAX(); break;
-//            case 'add-comment-ajax':
-//                $this->createCommentAJAX(); break;
+            case 'logout':
+//                $this->getTop();
+                $this->logoutAction();
+//                $this->getBottom();
+                break;
             default:
                 include_once('404.php');
         }
@@ -62,20 +61,30 @@ class Controller
         include_once('footer.php');
     }
 
-    /**
-     * Action shows single news item with title, text, comment form and comments list.
-     */
-//    public function view(){
-//        $model = new Model();
-//        $id = $model->getIntPurify($_GET['id']);
-//        $row = $model->getItem($id);
-//        $comments = $model->getComments($id);
-//        include_once('single-view.php');
-//    }
-
     public function loginAction()
     {
+        if (isset($_POST['submit'])) {
+            session_start();
+            if (Model::checkCredentials($_POST['login'], $_POST['password'])) {
+                $_SESSION['admin'] = 'verified';
+                header("Location: /");
+                die;
+            } else {
+                $_SESSION['error'] = 'Wrong login or password';
+                header("Location: /?r=login");
+                die;
+            }
+        }
+
         include_once('view-login.php');
+    }
+
+    public function logoutAction()
+    {
+        session_start();
+        unset($_SESSION['admin']);
+        header("Location: /");
+        die;
     }
 
     /**

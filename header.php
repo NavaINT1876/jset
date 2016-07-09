@@ -34,7 +34,15 @@
             <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="/?r=login">Admin</a>
+                            <?php session_start();
+                            if(!isset($_SESSION['admin'])){ ?>
+                        <a href="/?r=login">
+                                Admin
+                            <?php }else{ ?>
+                        <a href="/?r=logout">
+                                Logout
+                            <?php } ?>
+                        </a>
                     </li>
                 </ul>
             </div>
