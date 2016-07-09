@@ -1,16 +1,17 @@
 <?php
-//Configuration file is included at first.
+
 include_once('db_conf.php');
+
 function __autoload($class_name) {
     include $class_name . '.php';
 }
-//New instance of Controller
+
 $controller = new Controller();
 
-//Getting route from global array $_GET
 $route = $controller->getRoute();
 
 /**
+ * TODO: rewrite these comments
  * In root directory configuration file is `conf.php`
  *
  * In root directory template(view) files are:
