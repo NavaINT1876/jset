@@ -140,19 +140,57 @@ class Model
      */
     public function saveNewComment()
     {
-        $info = pathinfo($_FILES['logo']['name']);
-        $newName = md5($_POST['name'] . $_FILES['userFile']['tmp_name']). time() . "." . $info['extension'];
-        $uploadfile = self::FILE_UPLOAD_DIR . $newName;
+        $uploadfile = null;
+        if(!empty($_FILES['logo']['name'])){
+            //Check mime type of the uploaded file
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            if (false === $ext = array_search(
+                    $finfo->file($_FILES['logo']['tmp_name']),
+                    array(
+                        'jpg' => 'image/jpeg',
+                        'png' => 'image/png',
+                        'gif' => 'image/gif',
+                    ),
+                    true
+                )) {
+                session_start();
+                $_SESSION['fileTypeError'] = 'Wrong file type was uploaded! Allowed types: JPG, GIF, PNG.';
+                header("Location: /");
+                die;
+            }
 
-        move_uploaded_file($_FILES['logo']['tmp_name'], $uploadfile);
+            $info = pathinfo($_FILES['logo']['name']);
+            $newName = md5($_POST['name'] . $_FILES['userFile']['tmp_name']). time() . "." . $info['extension'];
+            $uploadfile = self::FILE_UPLOAD_DIR . $newName;
+
+            move_uploaded_file($_FILES['logo']['tmp_name'], $uploadfile);
+        }
+
+        $name = $this->purifyVal($_POST['name']);
+        $email = $this->purifyVal($_POST['email']);
+        $message = $this->purifyVal($_POST['message']);
+
+        if(empty($name) || empty($email) || empty($message)){
+            session_start();
+            $_SESSION['error'] = 'Some fields missing. Check all fields.';
+            header("Location: /");
+            die;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            session_start();
+            $_SESSION['error'] = 'Wrong email.';
+            header("Location: /");
+            die;
+        }
 
         $preparedQuery = "INSERT INTO `" . DB_NAME . "`.`" . self::COMMENTS
             . "` (`name` , `email` , `message` , `created_at` , `logo`)
             VALUES (:thename , :email, :message, :created_at, :logo)";
         $query = $this->db->prepare($preparedQuery);
-        $query->bindParam(':thename', $this->purifyVal($_POST['name']));
-        $query->bindParam(':email', $this->purifyVal($_POST['email']));
-        $query->bindParam(':message', $this->purifyVal($_POST['message']));
+        $query->bindParam(':thename', $name);
+        $query->bindParam(':email', $email);
+        $query->bindParam(':message', $message);
         $query->bindParam(':created_at', time());
         $query->bindParam(':logo', $uploadfile);
         $query->execute();

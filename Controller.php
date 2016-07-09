@@ -19,7 +19,7 @@ class Controller
 
         $sortValue = $model->purifyVal($_GET['sortVal']);
         $sortOrder = $model->purifyVal($_GET['sortOrder']);
-        if(empty($sortValue) || empty($sortOrder)){
+        if (empty($sortValue) || empty($sortOrder)) {
             $sortValue = 'created_at';
             $sortOrder = 'desc';
         }
@@ -29,8 +29,11 @@ class Controller
                 $this->mainAction($sortValue, $sortOrder);
                 $this->getBottom();
                 break;
-//            case 'edit-news-ajax':
-//                $this->editAJAX(); break;
+            case 'login':
+                $this->getTop();
+                $this->loginAction();
+                $this->getBottom();
+                break;
 //            case 'create-news-ajax':
 //                $this->createAJAX(); break;
 //            case 'delete-news-ajax':
@@ -69,6 +72,11 @@ class Controller
 //        $comments = $model->getComments($id);
 //        include_once('single-view.php');
 //    }
+
+    public function loginAction()
+    {
+        include_once('view-login.php');
+    }
 
     /**
      * Action shows news list.

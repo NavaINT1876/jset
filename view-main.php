@@ -13,6 +13,13 @@
                                             </div>">
         <div class="col-md-2 col-lg-3"></div>
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6" id="comments-container">
+            <?php
+            session_start();
+            if(isset($_SESSION['error'])){ ?>
+                <div class="alert alert-danger"><?= $_SESSION['error'] ?></div>
+            <?php
+            unset($_SESSION['error']);
+            } ?>
             <div class="btn-group" role="group">
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -50,7 +57,7 @@
                         <span class="pull-right">Date: <?= date('d.M.Y H:i', $comment['created_at']) ?></span>
                     </div>
                     <div class="panel-body">
-                        <img src="<?= $comment['logo'] ?>" width="80" alt="Logo" class="user-logo">
+                        <img src="<?= ($comment['logo']) ? $comment['logo'] : 'uploads/sample.jpg' ?>" width="80" alt="Logo" class="user-logo">
                         <p><?= $comment['message'] ?></p>
                     </div>
                 </div>

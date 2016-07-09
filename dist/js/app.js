@@ -10,6 +10,8 @@ $(document).ready(function () {
         email = form.find('input#email').val();
         message = form.find('textarea#message').val();
 
+
+
         if (name != '' && email != '' && message != '') {
             newCommentBlockSample = $('#comments-wrapper').data('prototype');
 
