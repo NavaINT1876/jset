@@ -8,19 +8,29 @@
                         Sort comments by:
                         <span class="caret"></span>
                     </button>
-                    <span>Sorted by:</span><!-- TODO: print out info about sorting -->
                     <ul class="dropdown-menu">
-                        <li><a href="/?sortVal=name&sortOrder=asc">Author A -> Z</a></li>
-                        <li><a href="/?sortVal=name&sortOrder=desc">Author Z -> A</a></li>
-                        <li><a href="/?sortVal=email&sortOrder=asc">E-mail A -> Z</a></li>
-                        <li><a href="/?sortVal=email&sortOrder=desc">E-mail Z -> A</a></li>
-                        <li><a href="/?sortVal=created_at&sortOrder=desc">Date New -> Old</a></li>
-                        <li><a href="/?sortVal=created_at&sortOrder=asc">Date Old -> New</a></li>
+                        <li <?php echo ($sortValue == 'name' && $sortOrder == 'asc') ? 'class="active"' : '' ?>>
+                            <a href="/?sortVal=name&sortOrder=asc">Author A -> Z</a>
+                        </li>
+                        <li <?php echo ($sortValue == 'name' && $sortOrder == 'desc') ? 'class="active"' : '' ?>>
+                            <a href="/?sortVal=name&sortOrder=desc">Author Z -> A</a>
+                        </li>
+                        <li <?php echo ($sortValue == 'email' && $sortOrder == 'asc') ? 'class="active"' : '' ?>>
+                            <a href="/?sortVal=email&sortOrder=asc">E-mail A -> Z</a>
+                        </li>
+                        <li <?php echo ($sortValue == 'email' && $sortOrder == 'desc') ? 'class="active"' : '' ?>>
+                            <a href="/?sortVal=email&sortOrder=desc">E-mail Z -> A</a>
+                        </li>
+                        <li <?php echo ($sortValue == 'created_at' && $sortOrder == 'desc') ? 'class="active"' : '' ?>>
+                            <a href="/?sortVal=created_at&sortOrder=desc">Date New -> Old</a>
+                        </li>
+                        <li <?php echo ($sortValue == 'created_at' && $sortOrder == 'asc') ? 'class="active"' : '' ?>>
+                            <a href="/?sortVal=created_at&sortOrder=asc">Date Old -> New</a>
+                        </li>
                     </ul>
                 </div>
             </div>
             <br><br>
-
             <?php foreach ($comments as $comment) { ?>
                 <div class="panel panel-default">
                     <div class="panel-heading">
