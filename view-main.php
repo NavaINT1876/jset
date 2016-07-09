@@ -53,6 +53,12 @@
                     <div class="panel-heading">
                         <span class="author">
                             <strong><?= $comment['name'] ?></strong>
+                            <?php if(isset($_SESSION['admin'])){ ?>
+                                <a href="/?r=edit&id=<?= $comment['id'] ?>" class="btn btn-primary btn-xs">
+                                    <span>Edit</span>
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                            <?php } ?>
                         </span>
                         <span class="pull-right">Date: <?= date('d.M.Y H:i', $comment['created_at']) ?></span>
                     </div>

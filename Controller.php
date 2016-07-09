@@ -95,7 +95,12 @@ class Controller
     public function mainAction($sortValue, $sortOrder)
     {
         $model = new Model();
-        $comments = $model->getComments($sortValue, $sortOrder);
+        session_start();
+        if(isset($_SESSION['admin'])){
+            $comments = $model->getAdminComments($sortValue, $sortOrder);
+        }else{
+            $comments = $model->getComments($sortValue, $sortOrder);
+        }
 
         if (isset($_POST['submit'])) {
             $model->saveNewComment();
