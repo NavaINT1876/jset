@@ -120,6 +120,15 @@ class Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getComment($id){
+        $preparedQuery = "SELECT  `id`, `name`, `email`, `message`, `is_approved`, `created_at`, `logo`
+         FROM `" . DB_NAME . "`.`" . self::COMMENTS .
+            "` WHERE id=:id";
+        $query = $this->db->prepare($preparedQuery);
+        $query->execute([':id' => $id]);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public static function checkCredentials($login, $password){
         if($login === self::ADMIN_LOGIN && password_verify($password, self::ADMIN_PASSWORD_HASH)){
             return true;

@@ -35,9 +35,12 @@ class Controller
                 $this->getBottom();
                 break;
             case 'logout':
-//                $this->getTop();
                 $this->logoutAction();
-//                $this->getBottom();
+                break;
+            case 'edit':
+                $this->getTop();
+                $this->editAction();
+                $this->getBottom();
                 break;
             default:
                 include_once('404.php');
@@ -106,6 +109,18 @@ class Controller
             $model->saveNewComment();
         }
         include_once('view-main.php');
+    }
+    public function editAction()
+    {
+        $model = new Model();
+        $id = (int)$model->purifyVal($_GET['id']);
+
+        $comment = $model->getComment($id);
+
+        if (isset($_POST['submit'])) {
+            $model->saveNewComment();
+        }
+        include_once('view-edit.php');
     }
 
 //    /**
